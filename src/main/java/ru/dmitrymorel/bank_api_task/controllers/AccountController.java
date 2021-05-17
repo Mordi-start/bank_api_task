@@ -3,6 +3,7 @@ package ru.dmitrymorel.bank_api_task.controllers;
 import ru.dmitrymorel.bank_api_task.model.Account;
 import ru.dmitrymorel.bank_api_task.service.AccountService;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public class AccountController implements CrudController<Account>{
@@ -11,6 +12,10 @@ public class AccountController implements CrudController<Account>{
     @Override
     public Account get(int id) {
         return accountService.get(id);
+    }
+
+    public BigDecimal getBalance (int id) {
+        return accountService.getBalance(id);
     }
 
     @Override
@@ -26,6 +31,10 @@ public class AccountController implements CrudController<Account>{
     @Override
     public void update(int id, Account account) {
         accountService.update(id, account);
+    }
+
+    public void updateBalance(int id, BigDecimal income) {
+        accountService.updateBalance(id, income);
     }
 
     @Override

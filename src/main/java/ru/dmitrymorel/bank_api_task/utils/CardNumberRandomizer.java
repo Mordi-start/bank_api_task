@@ -13,6 +13,9 @@ public class CardNumberRandomizer {
         for (int i = 1; i <= length; i++) {
             String randomNumber = Integer.toString(random.nextInt(10));
             stringBuilder.append(randomNumber);
+            if (i == length) {
+                break;
+            }
             if (i % 4 == 0) {
                 stringBuilder.append(" ");
             }

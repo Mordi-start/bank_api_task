@@ -31,16 +31,9 @@ public class CardHandler implements HttpHandler {
     public void handle(HttpExchange httpExchange) throws IOException {
         if ("GET".equals(httpExchange.getRequestMethod())) {
             handleGetRequest(httpExchange);
-        } else if ("POST".equals(httpExchange)) {
+        } else if ("POST".equals(httpExchange.getRequestMethod())) {
             handlePostRequest(httpExchange);
         }
-
-        handleResponse(httpExchange);
-    }
-
-    private void handleResponse(HttpExchange httpExchange) throws IOException {
-        String success = "Success";
-        httpExchange.sendResponseHeaders(200, success.length());
     }
 
     private void handlePostRequest(HttpExchange httpExchange) throws IOException {

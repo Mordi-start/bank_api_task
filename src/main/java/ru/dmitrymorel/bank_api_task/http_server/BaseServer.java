@@ -25,6 +25,7 @@ public class BaseServer {
 
         server.createContext("/getAllCardsForAccount", new CardHandler(cardService));
         server.createContext("/test", new TestHandler(cardService));
+        server.createContext("/createCardForAccount", new CardHandler(cardService));
         server.start();
     }
 }

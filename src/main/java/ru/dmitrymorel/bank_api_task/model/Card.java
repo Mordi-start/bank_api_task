@@ -6,15 +6,10 @@ import java.util.Objects;
 
 public class Card {
 
-    @JsonProperty("Id")
     private int id;
-    @JsonProperty("Number")
     private String number;
-    @JsonProperty("Type")
     private String type;
-    @JsonProperty("PaymentSystem")
     private String paymentSystem;
-    @JsonProperty("AccountId")
     private int accountId;
 
     public Card() {

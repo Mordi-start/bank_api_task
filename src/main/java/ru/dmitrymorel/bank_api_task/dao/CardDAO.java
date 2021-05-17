@@ -151,7 +151,7 @@ public class CardDAO implements CrudDAO<Card>{
     public void saveForAccount(String type, String paymentSystem, int account_id) {
         try {
             PreparedStatement preparedStatement =
-                    connection.prepareStatement("INSERT INTO cards " +
+                    connection.prepareStatement("INSERT INTO cards(ID, NUMBER, TYPE , PAYMENT_SYSTEM, ACCOUNT_ID) " +
                             "VALUES(DEFAULT,?,?,?,?)");
 
             preparedStatement.setString(1, CardNumberRandomizer.randomNumber());

@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserDAO implements CrudDAO<User>{
-
     private static final Connection connection = ConnectionBD.connection;
 
     @Override

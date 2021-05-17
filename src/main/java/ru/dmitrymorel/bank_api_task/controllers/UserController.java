@@ -13,8 +13,8 @@ public class UserController {
         return userService.get(id);
     }
 
-    public List<User> getAllUsers() {
-        return userService.getAllUsers();
+    public List<User> getAll() {
+        return userService.getAll();
     }
 
     public void save(User user) {

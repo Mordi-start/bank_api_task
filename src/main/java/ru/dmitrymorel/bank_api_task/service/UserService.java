@@ -15,8 +15,8 @@ public class UserService implements CrudService<User>{
     }
 
     @Override
-    public List<User> getAllUsers() {
-        return userDAO.getAllUsers();
+    public List<User> getAll() {
+        return userDAO.getAll();
     }
 
     @Override

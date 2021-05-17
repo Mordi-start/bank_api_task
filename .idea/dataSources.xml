@@ -7,33 +7,6 @@
       <jdbc-driver>org.h2.Driver</jdbc-driver>
       <jdbc-url>jdbc:h2:~/database</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
-      <init-script>CREATE TABLE USERS (
-                       ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                       NAME VARCHAR2,
-                       SURNAME VARCHAR2
-);
-CREATE TABLE ACCOUNTS (
-                          ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                          NUMBER VARCHAR2(20),
-                          FUNDS DOUBLE,
-                          USER_ID INT,
-                          FOREIGN KEY (USER_ID) REFERENCES USERS(ID)
-);
-CREATE TABLE CARDS (
-                       ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
-                       NUMBER VARCHAR2(20),
-                       USER_ID INT,
-                       FOREIGN KEY (USER_ID) REFERENCES USERS(ID)
-);
-INSERT INTO USERS VALUES (DEFAULT, 'Dmitry', 'Morel');
-INSERT INTO USERS VALUES (DEFAULT, 'Yuri', 'Sikalov');
-INSERT INTO USERS VALUES (DEFAULT, 'Alex', 'Kotov');
-INSERT INTO ACCOUNTS VALUES ( DEFAULT, '11111111111111111111', 9000000000, 1 );
-INSERT INTO ACCOUNTS VALUES ( DEFAULT, '22222222222222222222', 9000000000, 2 );
-INSERT INTO ACCOUNTS VALUES ( DEFAULT, '33333333333333333333', 9000000000, 3 );
-INSERT INTO CARDS VALUES ( DEFAULT, '1111 2222 3333 4444', 1 );
-INSERT INTO CARDS VALUES ( DEFAULT, '2222 3333 4444 5555', 2 );
-INSERT INTO CARDS VALUES ( DEFAULT, '3333 4444 5555 6666', 3 );</init-script>
     </data-source>
   </component>
 </project>

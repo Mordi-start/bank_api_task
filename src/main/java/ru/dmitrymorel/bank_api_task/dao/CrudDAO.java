@@ -6,7 +6,7 @@ public interface CrudDAO<T> {
 
     T get(int id);
 
-    List<T> getAllUsers();
+    List<T> getAll();
 
     void save(T t);
 

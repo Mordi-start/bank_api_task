@@ -1,8 +1,8 @@
-package ru.dmitrymorel.bank_api_task.service;
+package ru.dmitrymorel.bank_api_task.controllers;
 
 import java.util.List;
 
-public interface CrudService<T> {
+public interface CrudController<T> {
 
     T get(int id);
 

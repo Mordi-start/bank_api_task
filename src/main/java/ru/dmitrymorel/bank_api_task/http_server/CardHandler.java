@@ -36,13 +36,8 @@ public class CardHandler implements HttpHandler {
 //        }
 //        int id = (int) params.get("id");
 //        int id = 1;
-        int id = Integer.parseInt(httpExchange
-                .getRequestURI()
-                .toString()
-                .split("\\?")[1]
-                .split("=")[1]);
         if ("GET".equals(httpExchange.getRequestMethod())) {
-            handleGetRequest(httpExchange, id);
+            handleGetRequest(httpExchange);
         } else if ("POST".equals(httpExchange.getRequestMethod())) {
             handlePostRequest(httpExchange);
         }
@@ -57,7 +52,12 @@ public class CardHandler implements HttpHandler {
         cardService.saveForAccount(type, paymentSystem, accountId);
     }
 
-    private void handleGetRequest(HttpExchange httpExchange, int id) throws IOException {
+    private void handleGetRequest(HttpExchange httpExchange) throws IOException {
+        int id = Integer.parseInt(httpExchange
+                .getRequestURI()
+                .toString()
+                .split("\\?")[1]
+                .split("=")[1]);
         List<Card> cardList = cardService.getAllForAccount(id);
         ArrayNode array = objectMapper.valueToTree(cardList);
         JsonNode result = objectMapper.createObjectNode().set("cards", array);

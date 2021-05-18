@@ -1,18 +1,19 @@
 package ru.dmitrymorel.bank_api_task.model;
 
+import java.math.BigDecimal;
 import java.util.Objects;
 
 public class Account {
 
     private int id;
     private String number;
-    private double balance;
+    private BigDecimal balance;
     private int userId;
 
     public Account() {
     }
 
-    public Account(String number, double balance, int userId) {
+    public Account(String number, BigDecimal balance, int userId) {
         this.number = number;
         this.balance = balance;
         this.userId = userId;
@@ -34,11 +35,11 @@ public class Account {
         this.number = number;
     }
 
-    public double getBalance() {
+    public BigDecimal getBalance() {
         return balance;
     }
 
-    public void setBalance(double balance) {
+    public void setBalance(BigDecimal balance) {
         this.balance = balance;
     }
 
@@ -55,7 +56,7 @@ public class Account {
         if (this == o) return true;
         if (!(o instanceof Account)) return false;
         Account account = (Account) o;
-        return id == account.id && Double.compare(account.balance, balance) == 0 && userId == account.userId && Objects.equals(number, account.number);
+        return id == account.id && userId == account.userId && Objects.equals(number, account.number) && Objects.equals(balance, account.balance);
     }
 
     @Override

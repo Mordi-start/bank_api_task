@@ -21,15 +21,16 @@ public class BaseServer {
 //        AccountDAO accountDAO = new AccountDAO();
 //        CardDAO cardDAO = new CardDAO();
 //        UserService userService = new UserService();
-//        AccountService accountService = new AccountService();
+        AccountService accountService = new AccountService();
         CardService cardService = new CardService();
 
-        HttpContext context = server.createContext("/getAllCardsForAccount", new CardHandler(cardService));
+        server.createContext("/getAllCardsForAccount", new CardHandler(cardService));
 //        context.getFilters().add(new ParameterFilter()); // Зацикливается из-за фильтров
 //        server.createContext("/getAllCardsForAccount", new CardHandler(cardService));
 //        server.createContext("/test", new TestHandler(cardService));
-//        server.createContext("/createCardForAccount", new CardHandler(cardService));
-//        server.createContext("/depositFunds", new CardHandler(cardService));
+        server.createContext("/createCardForAccount", new CardHandler(cardService));
+        server.createContext("/getBalanceForAccount", new AccountHandler(accountService));
+        server.createContext("/updateBalance", new AccountHandler(accountService));
         server.start();
     }
 }

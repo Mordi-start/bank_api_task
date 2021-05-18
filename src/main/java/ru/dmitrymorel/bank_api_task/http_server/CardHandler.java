@@ -1,6 +1,5 @@
 package ru.dmitrymorel.bank_api_task.http_server;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -11,10 +10,8 @@ import ru.dmitrymorel.bank_api_task.service.CardService;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.StringWriter;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class CardHandler implements HttpHandler {
 
@@ -29,8 +26,23 @@ public class CardHandler implements HttpHandler {
 
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
+//        Map<String, Object> params =
+//                (Map<String, Object>) httpExchange.getAttribute("parameters");
+//        int id = 0;
+//        for (Map.Entry<String, Object> entry : params.entrySet()) {
+//            if (entry.getKey().equals("id")) {
+//                id = (int) entry.getValue();
+//            }
+//        }
+//        int id = (int) params.get("id");
+//        int id = 1;
+        int id = Integer.parseInt(httpExchange
+                .getRequestURI()
+                .toString()
+                .split("\\?")[1]
+                .split("=")[1]);
         if ("GET".equals(httpExchange.getRequestMethod())) {
-            handleGetRequest(httpExchange);
+            handleGetRequest(httpExchange, id);
         } else if ("POST".equals(httpExchange.getRequestMethod())) {
             handlePostRequest(httpExchange);
         }
@@ -45,8 +57,8 @@ public class CardHandler implements HttpHandler {
         cardService.saveForAccount(type, paymentSystem, accountId);
     }
 
-    private void handleGetRequest(HttpExchange httpExchange) throws IOException {
-        List<Card> cardList = cardService.getAll();
+    private void handleGetRequest(HttpExchange httpExchange, int id) throws IOException {
+        List<Card> cardList = cardService.getAllForAccount(id);
         ArrayNode array = objectMapper.valueToTree(cardList);
         JsonNode result = objectMapper.createObjectNode().set("cards", array);
 
@@ -56,5 +68,6 @@ public class CardHandler implements HttpHandler {
         OutputStream outputStream = httpExchange.getResponseBody();
 
         outputStream.write(stringResult.getBytes());
+        outputStream.close();
     }
 }

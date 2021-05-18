@@ -1,13 +1,8 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project version="4">
-  <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="database" uuid="f4376a78-992c-464e-a361-a4affa7aac85">
-      <driver-ref>h2.unified</driver-ref>
-      <synchronize>true</synchronize>
-      <jdbc-driver>org.h2.Driver</jdbc-driver>
-      <jdbc-url>jdbc:h2:~/database</jdbc-url>
-      <working-dir>$ProjectFileDir$</working-dir>
-      <init-script>CREATE TABLE USERS(
+-- DROP TABLE CARDS;
+-- DROP TABLE ACCOUNTS;
+-- DROP TABLE USERS;
+
+CREATE TABLE USERS(
                       ID INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
                       NAME VARCHAR2,
                       SURNAME VARCHAR2
@@ -43,7 +38,9 @@ INSERT INTO CARDS VALUES ( DEFAULT, '1111 2222 5555 4444', 'CRED', 'MIR', 1 );
 INSERT INTO CARDS VALUES ( DEFAULT, '2222 2222 3333 4444', 'DEB', 'VISA', 2 );
 INSERT INTO CARDS VALUES ( DEFAULT, '3333 2222 3333 4444', 'DEB', 'MASTER', 3 );
 INSERT INTO CARDS VALUES ( DEFAULT, '3333 2222 3333 4444', 'DEB', 'VISA', 4 );
-INSERT INTO CARDS VALUES ( DEFAULT, '3333 2222 3333 4444', 'DEB', 'MIR', 5 );</init-script>
-    </data-source>
-  </component>
-</project>
+INSERT INTO CARDS VALUES ( DEFAULT, '3333 2222 3333 4444', 'DEB', 'MIR', 5 );
+
+-- DELETE FROM USERS WHERE ID = 1;
+SELECT * FROM USERS;
+SELECT * FROM ACCOUNTS;
+SELECT * FROM CARDS;

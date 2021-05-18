@@ -13,7 +13,7 @@ public class AccountDAO implements CrudDAO<Account> {
 
     private static final Connection connection = ConnectionBD.connection;
     private final CardDAO cardDAO = new CardDAO();
-    
+
     @Override
     public Account get(int id) {
         /*Account account = null;
@@ -44,7 +44,7 @@ public class AccountDAO implements CrudDAO<Account> {
         return null;
     }
 
-    public BigDecimal getBalance (int id) {
+    public BigDecimal getBalance(int id) {
         BigDecimal balance = BigDecimal.valueOf(0.0);
 
         try {
@@ -68,7 +68,6 @@ public class AccountDAO implements CrudDAO<Account> {
 
     @Override
     public List<Account> getAll() {
-/*
         List<Account> accounts = new ArrayList<>();
 
         try {
@@ -82,7 +81,7 @@ public class AccountDAO implements CrudDAO<Account> {
 
                 account.setId(resultSet.getInt("id"));
                 account.setNumber(resultSet.getString("number"));
-                account.setBalance(resultSet.getDouble("balance"));
+                account.setBalance(resultSet.getBigDecimal("balance"));
                 account.setUserId(resultSet.getInt("user_id"));
 
                 accounts.add(account);
@@ -90,9 +89,8 @@ public class AccountDAO implements CrudDAO<Account> {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-*/
 
-        return null;
+        return accounts;
     }
 
     @Override
@@ -146,6 +144,27 @@ public class AccountDAO implements CrudDAO<Account> {
         }
     }
 
+    public void transaction(int sendAccountId, int gettingAccountId, BigDecimal income) {
+        try {
+            PreparedStatement preparedStatement =
+                    connection.prepareStatement("UPDATE accounts SET " +
+                            "BALANCE=? WHERE ID =?;" +
+                            "UPDATE ACCOUNTS SET BALANCE=? WHERE ID = ?");
+
+            BigDecimal sendingBalance = getBalance(sendAccountId);
+            BigDecimal gettingBalance = getBalance(gettingAccountId);
+
+            preparedStatement.setBigDecimal(1, sendingBalance.add(income.negate()));
+            preparedStatement.setInt(2, sendAccountId);
+            preparedStatement.setBigDecimal(3, gettingBalance.add(income));
+            preparedStatement.setInt(4, gettingAccountId);
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
+
     @Override
     public void delete(int id) {
 /*        PreparedStatement preparedStatement = null;
@@ -161,5 +180,5 @@ public class AccountDAO implements CrudDAO<Account> {
             throwables.printStackTrace();
         }*/
     }
-    
+
 }

@@ -31,6 +31,7 @@ public class BaseServer {
         server.createContext("/createCardForAccount", new CardHandler(cardService));
         server.createContext("/getBalanceForAccount", new AccountHandler(accountService));
         server.createContext("/updateBalance", new AccountHandler(accountService));
+        server.createContext("/doTransaction", new TransactionHandler(accountService));
         server.start();
     }
 }

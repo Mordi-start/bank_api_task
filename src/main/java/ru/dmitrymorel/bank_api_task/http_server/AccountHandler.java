@@ -4,12 +4,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import ru.dmitrymorel.bank_api_task.model.Account;
+import ru.dmitrymorel.bank_api_task.model.BalanceRequest;
 import ru.dmitrymorel.bank_api_task.service.AccountService;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.math.BigDecimal;
-import java.nio.charset.StandardCharsets;
 
 public class AccountHandler implements HttpHandler {
 
@@ -46,7 +46,8 @@ public class AccountHandler implements HttpHandler {
                 .split("\\?")[1]
                 .split("=")[1]);
         BigDecimal balance = accountService.getBalance(id);
-        String result = objectMapper.writeValueAsString(balance);
+        BalanceRequest  balanceRequest = new BalanceRequest(id, balance);
+        String result = objectMapper.writeValueAsString(balanceRequest);
 
         httpExchange.sendResponseHeaders(200, result.length());
         OutputStream outputStream = httpExchange.getResponseBody();

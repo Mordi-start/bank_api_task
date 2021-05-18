@@ -13,7 +13,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CardDAO implements CrudDAO<Card>{
+public class CardDAO implements CrudDAO<Card> {
     private static final Connection connection = ConnectionBD.connection;
     private static final AccountDAO accountDAO = new AccountDAO();
 

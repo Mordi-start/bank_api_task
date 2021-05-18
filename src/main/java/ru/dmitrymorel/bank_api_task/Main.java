@@ -3,6 +3,7 @@ package ru.dmitrymorel.bank_api_task;
 import ru.dmitrymorel.bank_api_task.controllers.AccountController;
 import ru.dmitrymorel.bank_api_task.controllers.CardController;
 import ru.dmitrymorel.bank_api_task.controllers.UserController;
+import ru.dmitrymorel.bank_api_task.dao.AccountDAO;
 import ru.dmitrymorel.bank_api_task.http_server.BaseServer;
 import ru.dmitrymorel.bank_api_task.model.Card;
 import ru.dmitrymorel.bank_api_task.model.User;
@@ -13,13 +14,19 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-
         BaseServer baseServer = new BaseServer();
         try {
             baseServer.startServer();
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+//        AccountDAO accountDAO = new AccountDAO();
+
+//        accountDAO.getAll().forEach(System.out::println);
+//        System.out.println("========================");
+//        accountDAO.transaction(1, 2, BigDecimal.valueOf(5000));
+//        accountDAO.getAll().forEach(System.out::println);
 
 //        CardController cardController = new CardController();
 //        AccountController accountController = new AccountController();
@@ -59,9 +66,9 @@ public class Main {
 //        userController.getAllUsers().forEach(System.out::println);
 //        System.out.println("==============");
 //
-////        userController.delete(1);
-////        userController.getAllUsers().forEach(System.out::println);
-////        System.out.println("==============");
+//        userController.delete(1);
+//        userController.getAllUsers().forEach(System.out::println);
+//        System.out.println("==============");
 //
 //        userController.save(user);
 //        userController.getAllUsers().forEach(System.out::println);

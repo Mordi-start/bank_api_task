@@ -41,7 +41,11 @@ public class AccountService implements CrudService<Account>{
         accountDAO.updateBalance(id, income);
     }
 
-    @Override
+    public void transaction(int sendAccountId, int gettingAccountId, BigDecimal income) {
+        accountDAO.transaction(sendAccountId, gettingAccountId, income);
+    }
+
+        @Override
     public void delete(int id) {
         accountDAO.delete(id);
     }

@@ -67,7 +67,6 @@ public class UserDAO implements CrudDAO<User>{
 
     @Override
     public void save(User user) {
-
         try {
             PreparedStatement preparedStatement =
                     connection.prepareStatement("INSERT INTO USERS " +

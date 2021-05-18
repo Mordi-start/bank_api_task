@@ -11,7 +11,6 @@ import ru.dmitrymorel.bank_api_task.service.CardService;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
-import java.util.Map;
 
 public class CardHandler implements HttpHandler {
 
@@ -26,16 +25,6 @@ public class CardHandler implements HttpHandler {
 
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
-//        Map<String, Object> params =
-//                (Map<String, Object>) httpExchange.getAttribute("parameters");
-//        int id = 0;
-//        for (Map.Entry<String, Object> entry : params.entrySet()) {
-//            if (entry.getKey().equals("id")) {
-//                id = (int) entry.getValue();
-//            }
-//        }
-//        int id = (int) params.get("id");
-//        int id = 1;
         if ("GET".equals(httpExchange.getRequestMethod())) {
             handleGetRequest(httpExchange);
         } else if ("POST".equals(httpExchange.getRequestMethod())) {

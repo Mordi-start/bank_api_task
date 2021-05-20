@@ -16,7 +16,7 @@ public class AccountDAO implements CrudDAO<Account> {
 
     @Override
     public Account get(int id) {
-        /*Account account = null;
+        Account account = null;
 
         try {
             PreparedStatement preparedStatement =
@@ -34,14 +34,14 @@ public class AccountDAO implements CrudDAO<Account> {
 
             account.setId(resultSet.getInt("id"));
             account.setNumber(resultSet.getString("number"));
-            account.setBalance(resultSet.getDouble("balance"));
+            account.setBalance(resultSet.getBigDecimal("balance"));
             account.setUserId(resultSet.getInt("user_id"));
 
 
         } catch (SQLException throwables) {
             throwables.printStackTrace();
-        }*/
-        return null;
+        }
+        return account;
     }
 
     public BigDecimal getBalance(int id) {
@@ -73,6 +73,34 @@ public class AccountDAO implements CrudDAO<Account> {
         try {
             PreparedStatement statement = connection
                     .prepareStatement("SELECT * FROM accounts");
+
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                Account account = new Account();
+
+                account.setId(resultSet.getInt("id"));
+                account.setNumber(resultSet.getString("number"));
+                account.setBalance(resultSet.getBigDecimal("balance"));
+                account.setUserId(resultSet.getInt("user_id"));
+
+                accounts.add(account);
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+        return accounts;
+    }
+
+    public List<Account> getAllForUser(int userId) {
+        List<Account> accounts = new ArrayList<>();
+
+        try {
+            PreparedStatement statement = connection
+                    .prepareStatement("SELECT * FROM accounts WHERE USER_ID=?");
+
+            statement.setInt(1, userId);
 
             ResultSet resultSet = statement.executeQuery();
 
@@ -127,7 +155,7 @@ public class AccountDAO implements CrudDAO<Account> {
         }*/
     }
 
-    public void updateBalance(int account_id, BigDecimal income) {
+    public void addMoney(int account_id, BigDecimal value) {
         try {
             PreparedStatement preparedStatement =
                     connection.prepareStatement("UPDATE accounts SET " +
@@ -135,7 +163,7 @@ public class AccountDAO implements CrudDAO<Account> {
 
             BigDecimal balance = getBalance(account_id);
 
-            preparedStatement.setBigDecimal(1, balance.add(income));
+            preparedStatement.setBigDecimal(1, balance.add(value));
             preparedStatement.setInt(2, account_id);
 
             preparedStatement.executeUpdate();
@@ -144,25 +172,29 @@ public class AccountDAO implements CrudDAO<Account> {
         }
     }
 
-    public void transaction(int sendAccountId, int gettingAccountId, BigDecimal income) {
+    public void withdrawMoney (int account_id, BigDecimal value) {
         try {
             PreparedStatement preparedStatement =
                     connection.prepareStatement("UPDATE accounts SET " +
-                            "BALANCE=? WHERE ID =?;" +
-                            "UPDATE ACCOUNTS SET BALANCE=? WHERE ID = ?");
+                            "BALANCE=? WHERE ID =?");
 
-            BigDecimal sendingBalance = getBalance(sendAccountId);
-            BigDecimal gettingBalance = getBalance(gettingAccountId);
+            BigDecimal balance = getBalance(account_id);
 
-            preparedStatement.setBigDecimal(1, sendingBalance.add(income.negate()));
-            preparedStatement.setInt(2, sendAccountId);
-            preparedStatement.setBigDecimal(3, gettingBalance.add(income));
-            preparedStatement.setInt(4, gettingAccountId);
+            if (balance.compareTo(value) == -1) {
+                throw new SQLException("Баланс меньше указанной суммы");
+            }
+            preparedStatement.setBigDecimal(1, balance.subtract(value));
+            preparedStatement.setInt(2, account_id);
 
             preparedStatement.executeUpdate();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
+    }
+
+    public void transaction(int sendAccountId, int gettingAccountId, BigDecimal value) {
+        withdrawMoney(sendAccountId, value);
+        addMoney(gettingAccountId, value);
     }
 
     @Override

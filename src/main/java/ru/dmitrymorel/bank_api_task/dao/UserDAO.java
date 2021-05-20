@@ -31,8 +31,7 @@ public class UserDAO implements CrudDAO<User>{
             user.setId(resultSet.getInt("id"));
             user.setName(resultSet.getString("name"));
             user.setSurname(resultSet.getString("surname"));
-
-
+            user.setEnabled(resultSet.getBoolean("enabled"));
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }

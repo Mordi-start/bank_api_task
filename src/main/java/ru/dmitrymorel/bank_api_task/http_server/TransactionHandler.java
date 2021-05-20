@@ -21,12 +21,12 @@ public class TransactionHandler implements HttpHandler {
 
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
-        TransactionRequest transactionRequest = objectMapper.readValue(httpExchange
-                .getRequestBody(), TransactionRequest.class );
-        int gettingAccountId = transactionRequest.getGettingAccountId();
-        int sendAccountId = transactionRequest.getSendAccountId();
-        BigDecimal income = transactionRequest.getIncome();
-
-        accountService.transaction(sendAccountId, gettingAccountId, income);
+//        TransactionRequest transactionRequest = objectMapper.readValue(httpExchange
+//                .getRequestBody(), TransactionRequest.class );
+//        int gettingAccountId = transactionRequest.getGettingAccountId();
+//        int sendAccountId = transactionRequest.getSendAccountId();
+//        BigDecimal income = transactionRequest.getIncome();
+//
+//        accountService.transaction(sendAccountId, gettingAccountId, income);
     }
 }

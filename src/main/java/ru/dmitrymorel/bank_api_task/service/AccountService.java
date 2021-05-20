@@ -27,6 +27,10 @@ public class AccountService implements CrudService<Account>{
         return accountDAO.getAll();
     }
 
+    public List<Account> getAllForUser(int userId) {
+        return accountDAO.getAllForUser(userId);
+    }
+
     @Override
     public void save(Account account) {
         accountDAO.save(account);
@@ -37,8 +41,8 @@ public class AccountService implements CrudService<Account>{
         accountDAO.update(id, account);
     }
 
-    public void updateBalance(int id, BigDecimal income) {
-        accountDAO.updateBalance(id, income);
+    public void addMoney(int id, BigDecimal income) {
+        accountDAO.addMoney(id, income);
     }
 
     public void transaction(int sendAccountId, int gettingAccountId, BigDecimal income) {

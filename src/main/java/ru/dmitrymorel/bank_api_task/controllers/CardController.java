@@ -29,8 +29,8 @@ public class CardController implements CrudController<Card> {
         cardService.save(card);
     }
 
-    public void saveForAccount(String type, String paymentSystem, int account_id) {
-        cardService.saveForAccount(type, paymentSystem, account_id);
+    public void saveForAccount(int account_id) {
+        cardService.saveForAccount(account_id);
     }
 
     public void update(int id, Card card) {

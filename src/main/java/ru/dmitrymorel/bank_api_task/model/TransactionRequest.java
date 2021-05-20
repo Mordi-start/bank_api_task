@@ -6,12 +6,15 @@ public class TransactionRequest {
 
     private int gettingAccountId;
     private int sendAccountId;
-    private BigDecimal income;
+    private BigDecimal value;
 
-    public TransactionRequest(int gettingAccountId, int sendAccountId, BigDecimal income) {
+    public TransactionRequest() {
+    }
+
+    public TransactionRequest(int sendAccountId, int gettingAccountId, BigDecimal value) {
         this.gettingAccountId = gettingAccountId;
         this.sendAccountId = sendAccountId;
-        this.income = income;
+        this.value = value;
     }
 
     public int getGettingAccountId() {
@@ -30,20 +33,20 @@ public class TransactionRequest {
         this.sendAccountId = sendAccountId;
     }
 
-    public BigDecimal getIncome() {
-        return income;
+    public BigDecimal getValue() {
+        return value;
     }
 
-    public void setIncome(BigDecimal income) {
-        this.income = income;
+    public void setValue(BigDecimal value) {
+        this.value = value;
     }
 
     @Override
     public String toString() {
         return "TransactionRequest{" +
-                "gettingAccountId=" + gettingAccountId +
-                ", sendAccountId=" + sendAccountId +
-                ", income=" + income +
+                "sendAccountId=" + sendAccountId +
+                ", gettingAccountId=" + gettingAccountId +
+                ", value=" + value +
                 '}';
     }
 }

@@ -31,12 +31,12 @@ public class AccountHandler implements HttpHandler {
     }
 
     private void handlePostRequest(HttpExchange httpExchange) throws IOException {
-        Account account = objectMapper.readValue(httpExchange
-                .getRequestBody(), Account.class);
-        int account_id = account.getId();
-        BigDecimal income = account.getBalance();
-
-        accountService.updateBalance(account_id, income);
+//        Account account = objectMapper.readValue(httpExchange
+//                .getRequestBody(), Account.class);
+//        int account_id = account.getId();
+//        BigDecimal income = account.getBalance();
+//
+//        accountService.updateBalance(account_id, income);
     }
 
     private void handleGetRequest(HttpExchange httpExchange) throws IOException {

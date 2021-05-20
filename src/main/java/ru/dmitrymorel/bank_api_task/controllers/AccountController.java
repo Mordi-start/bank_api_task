@@ -34,7 +34,7 @@ public class AccountController implements CrudController<Account>{
     }
 
     public void updateBalance(int id, BigDecimal income) {
-        accountService.updateBalance(id, income);
+        accountService.addMoney(id, income);
     }
 
     @Override

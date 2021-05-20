@@ -1,5 +1,6 @@
 package ru.dmitrymorel.bank_api_task.dao;
 
+import org.h2.jdbc.JdbcSQLNonTransientException;
 import ru.dmitrymorel.bank_api_task.model.Account;
 import ru.dmitrymorel.bank_api_task.model.Card;
 import ru.dmitrymorel.bank_api_task.model.User;
@@ -36,9 +37,37 @@ public class CardDAO implements CrudDAO<Card> {
 
             card.setId(resultSet.getInt("id"));
             card.setNumber(resultSet.getString("number"));
-            card.setType(resultSet.getString("type"));
-            card.setPaymentSystem(resultSet.getString("payment_system"));
             card.setAccountId(resultSet.getInt("account_id"));
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return card;
+    }
+
+    public Card getByCardNumber(String cardNumber) {
+        Card card = null;
+        try {
+            PreparedStatement preparedStatement =
+                    connection.prepareStatement(
+                            "SELECT * FROM cards " +
+                                    "WHERE number=?");
+
+            preparedStatement.setString(1, cardNumber);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            resultSet.next();
+
+            card = new Card();
+
+            try {
+                card.setId(resultSet.getInt("id"));
+                card.setNumber(resultSet.getString("number"));
+                card.setAccountId(resultSet.getInt("account_id"));
+            } catch (JdbcSQLNonTransientException e) {
+                System.out.println("Счет не существует");
+            }
+
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -59,8 +88,6 @@ public class CardDAO implements CrudDAO<Card> {
 
                 card.setId(resultSet.getInt("id"));
                 card.setNumber(resultSet.getString("number"));
-                card.setType(resultSet.getString("type"));
-                card.setPaymentSystem(resultSet.getString("payment_system"));
                 card.setAccountId(resultSet.getInt("account_id"));
 
                 cards.add(card);
@@ -86,8 +113,6 @@ public class CardDAO implements CrudDAO<Card> {
 
                 card.setId(resultSet.getInt("id"));
                 card.setNumber(resultSet.getString("number"));
-                card.setType(resultSet.getString("type"));
-                card.setPaymentSystem(resultSet.getString("payment_system"));
                 card.setAccountId(resultSet.getInt("account_id"));
 
                 cards.add(card);
@@ -118,8 +143,6 @@ public class CardDAO implements CrudDAO<Card> {
 
                 card.setId(resultSet.getInt("id"));
                 card.setNumber(resultSet.getString("number"));
-                card.setType(resultSet.getString("type"));
-                card.setPaymentSystem(resultSet.getString("payment_system"));
                 card.setAccountId(resultSet.getInt("account_id"));
 
                 cards.add(card);
@@ -138,8 +161,6 @@ public class CardDAO implements CrudDAO<Card> {
                             "VALUES(DEFAULT,?,?,?,?)");
 
             preparedStatement.setString(1, card.getNumber());
-            preparedStatement.setString(2, card.getType());
-            preparedStatement.setString(3, card.getPaymentSystem());
             preparedStatement.setInt(4, card.getAccountId());
 
             preparedStatement.executeUpdate();
@@ -148,18 +169,40 @@ public class CardDAO implements CrudDAO<Card> {
         }
     }
 
-    public void saveForAccount(String type, String paymentSystem, int account_id) {
+    public boolean checkAccount(int userId) {
+        try {
+            PreparedStatement preparedStatement = connection
+                    .prepareStatement("SELECT NUMBER FROM ACCOUNTS " +
+                            "WHERE USER_ID=?");
+
+            preparedStatement.setInt(1, userId);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            return resultSet.next();
+        } catch (SQLException throwables) {
+            System.out.println("Счет не существует");
+        }
+        return false;
+    }
+
+    public void saveForAccount(int account_id) {
         try {
             PreparedStatement preparedStatement =
-                    connection.prepareStatement("INSERT INTO cards(ID, NUMBER, TYPE , PAYMENT_SYSTEM, ACCOUNT_ID) " +
-                            "VALUES(DEFAULT,?,?,?,?)");
+                    connection.prepareStatement("INSERT INTO cards(ID, NUMBER, ACCOUNT_ID) " +
+                            "VALUES(DEFAULT,?,?)");
 
-            preparedStatement.setString(1, CardNumberRandomizer.randomNumber());
-            preparedStatement.setString(2, type);
-            preparedStatement.setString(3, paymentSystem);
-            preparedStatement.setInt(4, account_id);
+            String cardNumber = CardNumberRandomizer.randomNumber();
 
-            preparedStatement.executeUpdate();
+            if (cardNumber.equals(getByCardNumber(cardNumber).getNumber())) { //Отдельный класс
+                saveForAccount(account_id);
+            }
+            else {
+                preparedStatement.setString(1, cardNumber);
+                preparedStatement.setInt(2, account_id);
+
+                preparedStatement.executeUpdate();
+            }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -173,8 +216,6 @@ public class CardDAO implements CrudDAO<Card> {
                             "TYPE=?, PAYMENT_SYSTEM=?, ACCOUNT_ID WHERE ID =?");
 
             preparedStatement.setString(1, card.getNumber());
-            preparedStatement.setString(2, card.getType());
-            preparedStatement.setString(3, card.getPaymentSystem());
             preparedStatement.setInt(3, card.getAccountId());
 
             preparedStatement.executeUpdate();

@@ -8,18 +8,16 @@ public class Card {
 
     private int id;
     private String number;
-    private String type;
-    private String paymentSystem;
     private int accountId;
+    private boolean enabled;
 
     public Card() {
     }
 
-    public Card(String number, String type, String paymentSystem, int accountId) {
+    public Card(String number, int accountId, boolean enabled) {
         this.number = number;
-        this.type = type;
-        this.paymentSystem = paymentSystem;
         this.accountId = accountId;
+        this.enabled = enabled;
     }
 
     public int getId() {
@@ -38,22 +36,6 @@ public class Card {
         this.number = number;
     }
 
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getPaymentSystem() {
-        return paymentSystem;
-    }
-
-    public void setPaymentSystem(String paymentSystem) {
-        this.paymentSystem = paymentSystem;
-    }
-
     public int getAccountId() {
         return accountId;
     }
@@ -62,17 +44,25 @@ public class Card {
         this.accountId = accountId;
     }
 
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Card)) return false;
         Card card = (Card) o;
-        return id == card.id && accountId == card.accountId && Objects.equals(number, card.number) && Objects.equals(type, card.type) && Objects.equals(paymentSystem, card.paymentSystem);
+        return id == card.id && accountId == card.accountId && enabled == card.enabled && Objects.equals(number, card.number);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, number, type, paymentSystem, accountId);
+        return Objects.hash(id, number, accountId, enabled);
     }
 
     @Override
@@ -80,9 +70,8 @@ public class Card {
         return "Card{" +
                 "id=" + id +
                 ", number='" + number + '\'' +
-                ", type='" + type + '\'' +
-                ", paymentSystem='" + paymentSystem + '\'' +
                 ", accountId=" + accountId +
+                ", enabled=" + enabled +
                 '}';
     }
 }

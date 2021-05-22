@@ -22,8 +22,4 @@ public class CardNumberRandomizer {
         }
         return stringBuilder.toString();
     }
-
-    public static void main(String[] args) {
-        System.out.println(randomNumber());
-    }
 }

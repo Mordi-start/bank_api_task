@@ -1,14 +1,14 @@
 package ru.dmitrymorel.bank_api_task.dao;
 
+import ru.dmitrymorel.bank_api_task.database.DatabaseConfig;
 import ru.dmitrymorel.bank_api_task.model.User;
-import ru.dmitrymorel.bank_api_task.utils.ConnectionBD;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class UserDAO implements CrudDAO<User>{
-    private static final Connection connection = ConnectionBD.connection;
+    private static final Connection connection = DatabaseConfig.getConnection();
 
     @Override
     public User get(int id) {

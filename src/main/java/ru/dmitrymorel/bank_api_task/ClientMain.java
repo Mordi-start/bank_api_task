@@ -1,24 +1,42 @@
 package ru.dmitrymorel.bank_api_task;
 
-import ru.dmitrymorel.bank_api_task.controllers.AccountController;
-import ru.dmitrymorel.bank_api_task.controllers.CardController;
-import ru.dmitrymorel.bank_api_task.controllers.UserController;
 import ru.dmitrymorel.bank_api_task.dao.AccountDAO;
+import ru.dmitrymorel.bank_api_task.dao.CardDAO;
+import ru.dmitrymorel.bank_api_task.database.DatabaseConfig;
 import ru.dmitrymorel.bank_api_task.http_server.BaseServer;
-import ru.dmitrymorel.bank_api_task.model.Card;
-import ru.dmitrymorel.bank_api_task.model.User;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.List;
 
 public class ClientMain {
     public static void main(String[] args) {
+
+        DatabaseConfig.getConnection();
+        DatabaseConfig.createTables();
         BaseServer baseServer = new BaseServer();
         try {
             baseServer.startServer();
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+//        AccountDAO accountDAO = new AccountDAO();
+//        accountDAO.getAllForUser(1).forEach(System.out::println);
+//        System.out.println("==============");
+//        accountDAO.addMoney(1, BigDecimal.valueOf(102021));
+//        accountDAO.withdrawMoney(6, BigDecimal.valueOf(111111));
+//        accountDAO.getAllForUser(1).forEach(System.out::println);
+//        CardDAO cardDAO = new CardDAO();
+//
+//        cardDAO.saveForAccount(1);
+//        cardDAO.saveForAccount(1);
+//        cardDAO.saveForAccount(4);
+//        cardDAO.saveForAccount(4);
+//        cardDAO.saveForAccount(4);
+//
+//        cardDAO.getAllForAccount(1).forEach(System.out::println);
+//        System.out.println("============");
+//
+//        cardDAO.getAllForAccount(4).forEach(System.out::println);
     }
 }

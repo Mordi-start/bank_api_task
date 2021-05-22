@@ -5,10 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
-import ru.dmitrymorel.bank_api_task.model.Account;
-import ru.dmitrymorel.bank_api_task.model.BalanceRequest;
-import ru.dmitrymorel.bank_api_task.model.Card;
-import ru.dmitrymorel.bank_api_task.model.TransactionRequest;
+import ru.dmitrymorel.bank_api_task.model.*;
 import ru.dmitrymorel.bank_api_task.service.AccountService;
 import ru.dmitrymorel.bank_api_task.service.CardService;
 
@@ -36,34 +33,49 @@ public class ClientHandler implements HttpHandler {
         switch (context) {
             case "/client/getAllAccounts": {
                 handleGetAllAccountsForUser(httpExchange);
+                break;
             }
             case "/client/getAllCardsForAccount": {
                 handleGetAllCardsForAccount(httpExchange);
+                break;
             }
             case "/client/getAllCardsForUser": {
                 handleGetAllCardsForUser(httpExchange);
+                break;
             }
             case "/client/createCardForAccount": {
                 handlePostCreateCardForAccount(httpExchange);
+                break;
             }
             case "/client/getBalanceForAccount": {
                 handleGetRequestForBalance(httpExchange);
+                break;
             }
             case "/client/addMoney": {
                 handlePostAddMoney(httpExchange);
+                break;
+            }
+            case "/client/withdrawMoney": {
+                handlePostWithdrawMoney(httpExchange);
+                break;
             }
             case "/client/doTransaction": {
                 handlePostTransaction(httpExchange);
+                break;
             }
             default: {
 
             }
         }
-//        if ("GET".equals(httpExchange.getRequestMethod())) {
-//            handleGetRequest(httpExchange);
-//        } else if ("POST".equals(httpExchange.getRequestMethod())) {
-//            handlePostRequest(httpExchange);
-//        }
+    }
+
+    private void handlePostWithdrawMoney(HttpExchange httpExchange) throws IOException {
+        DepositAndWithdrawRequest request = objectMapper.readValue(httpExchange
+                .getRequestBody(), DepositAndWithdrawRequest.class);
+        int cardId = request.getCardId();
+        BigDecimal value = request.getValue();
+
+        accountService.withdrawMoney(cardId, value);
     }
 
     private void handlePostTransaction(HttpExchange httpExchange) throws IOException {
@@ -96,12 +108,12 @@ public class ClientHandler implements HttpHandler {
     }
 
     private void handlePostAddMoney(HttpExchange httpExchange) throws IOException {
-        Account account = objectMapper.readValue(httpExchange
-                .getRequestBody(), Account.class);
-        int account_id = account.getId();
-        BigDecimal income = account.getBalance();
+        DepositAndWithdrawRequest request = objectMapper.readValue(httpExchange
+                .getRequestBody(), DepositAndWithdrawRequest.class);
+        int cardId = request.getCardId();
+        BigDecimal value = request.getValue();
 
-        accountService.addMoney(account_id, income);
+        accountService.addMoney(cardId, value);
     }
 
     private void handleGetRequestForBalance(HttpExchange httpExchange) throws IOException {

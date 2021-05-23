@@ -184,7 +184,7 @@ public class CardDAO /*implements CrudDAO<Card>*/ {
         return false;
     }
 
-    public void saveForAccount(int account_id) {
+    public void saveForAccount(int accountId) {
         try {
             PreparedStatement preparedStatement =
                     connection.prepareStatement("INSERT INTO cards(ID, NUMBER, ACCOUNT_ID) " +
@@ -193,11 +193,11 @@ public class CardDAO /*implements CrudDAO<Card>*/ {
             String cardNumber = CardNumberRandomizer.randomNumber();
 
             if (!checkCardNumber(cardNumber)) { //Отдельный класс
-                saveForAccount(account_id);
+                saveForAccount(accountId);
             }
             else {
                 preparedStatement.setString(1, cardNumber);
-                preparedStatement.setInt(2, account_id);
+                preparedStatement.setInt(2, accountId);
 
                 preparedStatement.executeUpdate();
             }

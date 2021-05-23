@@ -2,6 +2,7 @@ package ru.dmitrymorel.bank_api_task.dao;
 
 import ru.dmitrymorel.bank_api_task.database.DatabaseConfig;
 import ru.dmitrymorel.bank_api_task.model.Account;
+import ru.dmitrymorel.bank_api_task.model.Card;
 
 import java.math.BigDecimal;
 import java.sql.*;
@@ -42,6 +43,31 @@ public class AccountDAO /*implements CrudDAO<Account>*/ {
 //        }
 //        return account;
 //    }
+
+    public boolean checkAccountEnabled(int accountId) {
+        Account account = null;
+        try {
+            PreparedStatement preparedStatement =
+                    connection.prepareStatement(
+                            "SELECT ENABLED FROM ACCOUNTS " +
+                                    "WHERE ID=?");
+
+            preparedStatement.setInt(1, accountId);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            account = new Account();
+
+            while (resultSet.next()) {
+                account.setEnabled(resultSet.getBoolean("enabled"));
+            }
+
+            return account.isEnabled();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return false;
+    }
 
     public BigDecimal getBalance(int id) {
         BigDecimal balance = BigDecimal.valueOf(0.0);

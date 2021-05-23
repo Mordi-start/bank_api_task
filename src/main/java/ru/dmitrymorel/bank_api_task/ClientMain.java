@@ -1,12 +1,9 @@
 package ru.dmitrymorel.bank_api_task;
 
-import ru.dmitrymorel.bank_api_task.dao.AccountDAO;
-import ru.dmitrymorel.bank_api_task.dao.CardDAO;
 import ru.dmitrymorel.bank_api_task.database.DatabaseConfig;
 import ru.dmitrymorel.bank_api_task.http_server.BaseServer;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 
 public class ClientMain {
     public static void main(String[] args) {

@@ -44,6 +44,27 @@ public class AccountDAO /*implements CrudDAO<Account>*/ {
 //        return account;
 //    }
 
+    public boolean checkAccountExists(int accountId) {
+        try {
+            PreparedStatement preparedStatement = connection
+                    .prepareStatement("SELECT ID FROM ACCOUNTS " +
+                            "WHERE ID=?");
+
+            preparedStatement.setInt(1, accountId);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            int id = 0;
+            while (resultSet.next()) {
+                id = resultSet.getInt("id");
+            }
+            return id != 0;
+        } catch (SQLException throwables) {
+            System.out.println("Счет не существует");
+        }
+        return false;
+    }
+
     public boolean checkAccountEnabled(int accountId) {
         Account account = null;
         try {
@@ -222,9 +243,9 @@ public class AccountDAO /*implements CrudDAO<Account>*/ {
         }
     }
 
-    public void transaction(int sendAccountId, int gettingAccountId, BigDecimal value) {
-        withdrawMoney(sendAccountId, value);
-        addMoney(gettingAccountId, value);
+    public void transaction(int sendCardId, int gettingCardId, BigDecimal value) {
+            withdrawMoney(sendCardId, value);
+            addMoney(gettingCardId, value);
     }
 
 //    @Override

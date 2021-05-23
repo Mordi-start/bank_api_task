@@ -189,27 +189,6 @@ public class CardDAO /*implements CrudDAO<Card>*/ {
 //        }
 //    }
 
-    public boolean checkAccountExists(int accountId) {
-        try {
-            PreparedStatement preparedStatement = connection
-                    .prepareStatement("SELECT ID FROM ACCOUNTS " +
-                            "WHERE ID=?");
-
-            preparedStatement.setInt(1, accountId);
-
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            int id = 0;
-            while (resultSet.next()) {
-                id = resultSet.getInt("id");
-            }
-            return id != 0;
-        } catch (SQLException throwables) {
-            System.out.println("Счет не существует");
-        }
-        return false;
-    }
-
     public void saveForAccount(int accountId) {
         try {
             PreparedStatement preparedStatement =
@@ -218,7 +197,7 @@ public class CardDAO /*implements CrudDAO<Card>*/ {
 
             String cardNumber = CardNumberRandomizer.randomNumber();
 
-            if (!checkCardNumber(cardNumber)) { //Отдельный класс
+            if (!checkCardNumber(cardNumber)) {
                 saveForAccount(accountId);
             }
             else {

@@ -81,11 +81,11 @@ public class ClientHandler implements HttpHandler {
     private void handlePostTransaction(HttpExchange httpExchange) throws IOException {
         TransactionRequest transactionRequest = objectMapper.readValue(httpExchange
                 .getRequestBody(), TransactionRequest.class);
-        int sendAccountId = transactionRequest.getSendAccountId();
-        int getAccountId = transactionRequest.getGettingAccountId();
-        BigDecimal income = transactionRequest.getValue();
+        int sendCardId = transactionRequest.getSendCardId();
+        int gettingCardId = transactionRequest.getGettingCardId();
+        BigDecimal value = transactionRequest.getValue();
 
-        accountService.transaction(sendAccountId, getAccountId, income);
+        accountService.transaction(sendCardId, gettingCardId, value);
     }
 
     private void handleGetAllAccountsForUser(HttpExchange httpExchange) throws IOException {

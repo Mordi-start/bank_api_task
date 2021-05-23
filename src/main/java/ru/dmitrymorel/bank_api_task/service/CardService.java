@@ -35,14 +35,21 @@ public class CardService /*implements CrudService<Card>*/ {
 //    }
 
     public void saveForAccount(int account_id) {
-        if(cardDAO.checkAccountExists(account_id) && accountDAO.checkAccountEnabled(account_id)) {
-            cardDAO.saveForAccount(account_id);
+        if(accountDAO.checkAccountExists(account_id)) {
+            if (accountDAO.checkAccountEnabled(account_id)) {
+                cardDAO.saveForAccount(account_id);
+            }
+            else try {
+                throw new SQLException();
+            } catch (SQLException throwables) {
+                System.out.println("Счет неактивен");
+            }
         }
         else {
             try {
-                throw new SQLException("Счет не существует или неактивен");
+                throw new SQLException();
             } catch (SQLException throwables) {
-                throwables.printStackTrace();
+                System.out.println("Счет не существует");
             }
         }
     }

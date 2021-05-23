@@ -52,9 +52,15 @@ public class AccountService /*implements CrudService<Account>*/{
         }
     }
 
-    public void transaction(int sendAccountId, int gettingAccountId, BigDecimal income) {
-
-        accountDAO.transaction(sendAccountId, gettingAccountId, income);
+    public void transaction(int sendCardId, int gettingCardId, BigDecimal value) {
+        if (cardDAO.checkCardEnabled(sendCardId) && cardDAO.checkCardEnabled(gettingCardId)) {
+            accountDAO.transaction(sendCardId, gettingCardId, value);
+        }
+        else try {
+            throw new SQLException();
+        } catch (SQLException throwables) {
+            System.out.println("Одна из карт неактивна или несуществует");
+        }
     }
 
     public void withdrawMoney(int cardId, BigDecimal value) {

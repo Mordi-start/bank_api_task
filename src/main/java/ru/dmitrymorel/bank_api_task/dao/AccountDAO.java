@@ -90,7 +90,7 @@ public class AccountDAO /*implements CrudDAO<Account>*/ {
         return false;
     }
 
-    public BigDecimal getBalance(int id) {
+    public BigDecimal getBalance(int cardId) {
         BigDecimal balance = BigDecimal.valueOf(0.0);
 
         try {
@@ -101,7 +101,7 @@ public class AccountDAO /*implements CrudDAO<Account>*/ {
                                     "(SELECT ACCOUNT_ID FROM CARDS " +
                                     "WHERE ID =?)");
 
-            preparedStatement.setInt(1, id);
+            preparedStatement.setInt(1, cardId);
 
             ResultSet resultSet = preparedStatement.executeQuery();
 

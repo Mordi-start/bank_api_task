@@ -5,22 +5,15 @@ import lombok.*;
 import java.math.BigDecimal;
 
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
 @EqualsAndHashCode
 @ToString
 public class Account {
-
     private int id;
     private String number;
     private BigDecimal balance;
     private int userId;
     private boolean enabled;
-
-    public Account(String number, BigDecimal balance, int userId, boolean enabled) {
-        this.number = number;
-        this.balance = balance;
-        this.userId = userId;
-        this.enabled = enabled;
-    }
 }

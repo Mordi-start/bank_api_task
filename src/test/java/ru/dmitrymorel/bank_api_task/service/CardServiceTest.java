@@ -3,7 +3,6 @@ package ru.dmitrymorel.bank_api_task.service;
 import junit.framework.TestCase;
 import org.junit.Before;
 import org.junit.Test;
-import ru.dmitrymorel.bank_api_task.dao.CardDAO;
 import ru.dmitrymorel.bank_api_task.database.DatabaseConfig;
 import ru.dmitrymorel.bank_api_task.model.Card;
 

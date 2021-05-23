@@ -2,6 +2,7 @@ package ru.dmitrymorel.bank_api_task.dao;
 
 import org.h2.jdbc.JdbcSQLNonTransientException;
 import ru.dmitrymorel.bank_api_task.database.DatabaseConfig;
+import ru.dmitrymorel.bank_api_task.model.Account;
 import ru.dmitrymorel.bank_api_task.model.Card;
 import ru.dmitrymorel.bank_api_task.utils.CardNumberRandomizer;
 
@@ -60,6 +61,31 @@ public class CardDAO /*implements CrudDAO<Card>*/ {
             if (!cardNumber.equals(number)) {
                 return true;
             }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean checkCardEnabled(int cardId) {
+        Card card = null;
+        try {
+            PreparedStatement preparedStatement =
+                    connection.prepareStatement(
+                            "SELECT ENABLED FROM CARDS " +
+                                    "WHERE ID=?");
+
+            preparedStatement.setInt(1, cardId);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            card = new Card();
+
+            while (resultSet.next()) {
+                card.setEnabled(resultSet.getBoolean("enabled"));
+            }
+
+            return card.isEnabled();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }

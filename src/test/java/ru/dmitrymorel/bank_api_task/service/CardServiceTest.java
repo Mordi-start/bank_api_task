@@ -11,7 +11,6 @@ import java.util.List;
 
 public class CardServiceTest extends TestCase {
 
-    private final Connection connection = DatabaseConfig.getConnection();
     private final CardService cardService = new CardService();
 
     @Before

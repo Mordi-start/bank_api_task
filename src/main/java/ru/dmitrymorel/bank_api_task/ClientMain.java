@@ -8,7 +8,6 @@ import java.io.IOException;
 public class ClientMain {
     public static void main(String[] args) {
 
-        DatabaseConfig.getConnection();
         DatabaseConfig.createTables();
         BaseServer baseServer = new BaseServer();
         try {

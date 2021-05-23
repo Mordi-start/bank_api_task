@@ -14,7 +14,6 @@ import java.util.List;
 
 public class AccountDAOTest extends TestCase {
 
-//    private final Connection connection = DatabaseConfig.getConnection();
     private final AccountDAO accountDAO = new AccountDAO();
 
     @Before

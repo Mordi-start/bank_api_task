@@ -1,34 +1,36 @@
 package ru.dmitrymorel.bank_api_task.dao;
 
-import junit.framework.TestCase;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.Rule;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.rules.ExpectedException;
 import ru.dmitrymorel.bank_api_task.database.DatabaseConfig;
 import ru.dmitrymorel.bank_api_task.model.Account;
-import ru.dmitrymorel.bank_api_task.model.Card;
 
 import java.math.BigDecimal;
-import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AccountDAOTest extends TestCase {
+import static org.junit.jupiter.api.Assertions.*;
+
+class AccountDAOTest {
 
     private final AccountDAO accountDAO = new AccountDAO();
 
-    @Before
-    public void beforeTests() {
+    @BeforeEach
+    void beforeTest() {
         DatabaseConfig.createTables();
     }
 
     @Test
-    public void testCheckAccountExists() {
+    void checkAccountExists() {
         boolean check = accountDAO.checkAccountExists(10);
         assertFalse(check);
     }
 
     @Test
-    public void testCheckAccountEnabled() {
+    void checkAccountEnabled() {
         boolean enabledFalse = accountDAO.checkAccountEnabled(5);
         boolean enabledTrue = accountDAO.checkAccountEnabled(1);
 
@@ -37,7 +39,7 @@ public class AccountDAOTest extends TestCase {
     }
 
     @Test
-    public void testGetBalance() {
+    void getBalance() {
         BigDecimal expected = BigDecimal.valueOf(900000d);
 
         BigDecimal actual = accountDAO.getBalance(1);
@@ -46,7 +48,7 @@ public class AccountDAOTest extends TestCase {
     }
 
     @Test
-    public void testGetAllForUser() {
+    void getAllForUser() {
         List<Account> expected = new ArrayList<>();
         expected.add(new Account(1, "11111111111111111111", BigDecimal.valueOf(900000d), 1, true));
         expected.add(new Account(4, "44444444444444444444", BigDecimal.valueOf(99090d), 1, true));
@@ -57,7 +59,7 @@ public class AccountDAOTest extends TestCase {
     }
 
     @Test
-    public void testAddMoney() {
+    void addMoney() {
         BigDecimal expected1 = accountDAO.getBalance(1).add(BigDecimal.valueOf(333.33));
 
         accountDAO.addMoney(1, BigDecimal.valueOf(333.33));
@@ -68,7 +70,7 @@ public class AccountDAOTest extends TestCase {
     }
 
     @Test
-    public void testWithdrawMoney() {
+    void withdrawMoney() {
         BigDecimal expected1 = accountDAO.getBalance(1).subtract(BigDecimal.valueOf(333.33d));
 
         accountDAO.withdrawMoney(1, BigDecimal.valueOf(333.33d));
@@ -79,7 +81,7 @@ public class AccountDAOTest extends TestCase {
     }
 
     @Test
-    public void testTransaction() {
+    void transaction() {
         BigDecimal value = BigDecimal.valueOf(10000d);
         int sendCardId = 1;
         int getCardId = 4;

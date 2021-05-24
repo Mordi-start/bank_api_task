@@ -16,31 +16,31 @@ import java.util.List;
 public class CardDAO /*implements CrudDAO<Card>*/ {
     private static final Connection connection = DatabaseConfig.getConnection();
 
-//    @Override
-//    public Card get(int id) {
-//        Card card = null;
-//        try {
-//            PreparedStatement preparedStatement =
-//                    connection.prepareStatement(
-//                            "SELECT * FROM cards " +
-//                                    "WHERE ID=?");
-//
-//            preparedStatement.setInt(1, id);
-//
-//            ResultSet resultSet = preparedStatement.executeQuery();
-//
-//            resultSet.next();
-//
-//            card = new Card();
-//
-//            card.setId(resultSet.getInt("id"));
-//            card.setNumber(resultSet.getString("number"));
-//            card.setAccountId(resultSet.getInt("account_id"));
-//        } catch (SQLException throwables) {
-//            throwables.printStackTrace();
-//        }
-//        return card;
-//    }
+    public Card get(int id) {
+        Card card = null;
+        try {
+            PreparedStatement preparedStatement =
+                    connection.prepareStatement(
+                            "SELECT * FROM cards " +
+                                    "WHERE ID=?");
+
+            preparedStatement.setInt(1, id);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            resultSet.next();
+
+            card = new Card();
+
+            card.setId(resultSet.getInt("id"));
+            card.setNumber(resultSet.getString("number"));
+            card.setAccountId(resultSet.getInt("account_id"));
+            card.setEnabled(resultSet.getBoolean("enabled"));
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return card;
+    }
 
     public boolean checkCardNumber (String cardNumber) {
         String number = null;

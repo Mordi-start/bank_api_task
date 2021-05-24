@@ -1,35 +1,35 @@
 package ru.dmitrymorel.bank_api_task.dao;
 
-import junit.framework.TestCase;
 import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import ru.dmitrymorel.bank_api_task.database.DatabaseConfig;
 import ru.dmitrymorel.bank_api_task.model.Card;
 
-import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CardDAOTest extends TestCase {
+import static org.junit.jupiter.api.Assertions.*;
 
-    private final Connection connection = DatabaseConfig.getConnection();
+class CardDAOTest {
+
     private final CardDAO cardDAO = new CardDAO();
     private List<Card> actual = new ArrayList<>();
 
-    @Before
-    public void beforeTests() {
+    @BeforeEach
+    void beforeTests() {
         DatabaseConfig.createTables();
     }
 
     @Test
-    public void testCheckCardNumber() {
+    void testCheckCardNumber() {
         boolean check = cardDAO.checkCardNumber("1111");
 
         assertFalse(check);
     }
 
     @Test
-    public void testCheckCardEnabled() {
+    void checkCardEnabled() {
         boolean enabledFalse = cardDAO.checkCardEnabled(2);
         boolean enabledTrue = cardDAO.checkCardEnabled(1);
 
@@ -38,7 +38,7 @@ public class CardDAOTest extends TestCase {
     }
 
     @Test
-    public void testGetAllForAccount() {
+    void getAllForAccount() {
         List<Card> expected = new ArrayList<>();
         expected.add(new Card(1, "1111", 1, true));
         expected.add(new Card(2, "1111 5555 3333 4444", 1, false));
@@ -50,7 +50,7 @@ public class CardDAOTest extends TestCase {
     }
 
     @Test
-    public void testGetAllForUser() {
+    void getAllForUser() {
         List<Card> expected = new ArrayList<>();
         expected.add(new Card(1, "1111", 1, true));
         expected.add(new Card(2, "1111 5555 3333 4444", 1, false));
@@ -63,7 +63,7 @@ public class CardDAOTest extends TestCase {
     }
 
     @Test
-    public void testSaveForAccount() {
+    void saveForAccount() {
         int cardId = 8;
         Card expected = new Card(cardId, null, 1, false);
 

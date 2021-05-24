@@ -2,7 +2,7 @@ package ru.dmitrymorel.bank_api_task.model;
 
 import lombok.*;
 
-import java.util.List;
+import java.math.BigDecimal;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -10,11 +10,10 @@ import java.util.List;
 @Setter
 @EqualsAndHashCode
 @ToString
-public class Card {
+public class Transaction {
     private int id;
-    private String number;
-    private int accountId;
+    private String cardNumber;
+    private String type;
+    private BigDecimal sum;
     private boolean enabled;
-//    private List<Transaction> transactions;
-
 }

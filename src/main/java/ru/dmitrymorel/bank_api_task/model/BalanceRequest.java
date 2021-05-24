@@ -1,37 +1,16 @@
 package ru.dmitrymorel.bank_api_task.model;
 
+import lombok.*;
+
 import java.math.BigDecimal;
 
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+@EqualsAndHashCode
+@ToString
 public class BalanceRequest {
     private int id;
     private BigDecimal balance;
-
-    public BalanceRequest(int id, BigDecimal balance) {
-        this.id = id;
-        this.balance = balance;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public BigDecimal getBalance() {
-        return balance;
-    }
-
-    public void setBalance(BigDecimal balance) {
-        this.balance = balance;
-    }
-
-    @Override
-    public String toString() {
-        return "BalanceRequest{" +
-                "id=" + id +
-                ", balance=" + balance +
-                '}';
-    }
 }

@@ -3,6 +3,7 @@ package ru.dmitrymorel.bank_api_task.model;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor

@@ -63,9 +63,6 @@ public class ClientHandler implements HttpHandler {
                 handlePostTransaction(httpExchange);
                 break;
             }
-            default: {
-
-            }
         }
     }
 
@@ -108,11 +105,11 @@ public class ClientHandler implements HttpHandler {
     }
 
     private void handlePostAddMoney(HttpExchange httpExchange) throws IOException {
+        System.out.println("GOTOVO");
         DepositAndWithdrawRequest request = objectMapper.readValue(httpExchange
                 .getRequestBody(), DepositAndWithdrawRequest.class);
         int cardId = request.getCardId();
         BigDecimal value = request.getValue();
-
         accountService.addMoney(cardId, value);
     }
 

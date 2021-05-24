@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.sun.net.httpserver.HttpServer;
 import junit.framework.TestCase;
+import org.h2.tools.RunScript;
 import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
 import ru.dmitrymorel.bank_api_task.dao.CardDAO;
@@ -19,85 +20,97 @@ import java.net.HttpURLConnection;
 import java.net.InetSocketAddress;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.security.cert.CertPathValidatorException;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class BaseServerTest extends TestCase {
 
-    private final ClientHandler clientHandler =
-            new ClientHandler(new CardService(),
-                    new AccountService());
-    private static List<Card> actual = new ArrayList<>();
-    private static List<Card> expected = new ArrayList<>();
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final static String TEST_PROPERTIES_PATH = "/Users/a19188814/Desktop/bank_api_task/src/test/java/ru/dmitrymorel/bank_api_task/http_server/db.properties";
+    private final static String SQL_TEST_SCRIPT_PATH = "/Users/a19188814/Desktop/bank_api_task/src/test/java/ru/dmitrymorel/bank_api_task/http_server/Script.sql";
+    private static Connection connection = null;
+
+    public void createTables() {
+        try (InputStream inputStream = new FileInputStream(TEST_PROPERTIES_PATH)) {
+            Properties properties = new Properties();
+            properties.load(inputStream);
+
+            String dbUrl = properties.getProperty("db.url");
+            String dbUsername = properties.getProperty("db.username");
+            String dbPassword = properties.getProperty("db.password");
+            String dbDriverClassName = properties.getProperty("db.driverClassName");
+
+            Class.forName(dbDriverClassName);
+            connection = DriverManager.getConnection(dbUrl, dbUsername, dbPassword);
+
+        } catch (IOException | SQLException | ClassNotFoundException e) {
+            throw new IllegalStateException();
+        }
+
+        try {
+            RunScript.execute(connection, new FileReader(SQL_TEST_SCRIPT_PATH));
+        } catch (FileNotFoundException | SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     @BeforeEach
     public void doBefore() throws SQLException {
-        DatabaseConfig.createTables();
+        createTables();
     }
 
     @Test
     public void testStartServer() throws IOException {
-//        HttpServer server = HttpServer.create(
-//                new InetSocketAddress(8000), 0);
-//        UserService userService = new UserService();
-//        AccountService accountService = new AccountService();
-//        CardService cardService = new CardService();
-//
-//        ClientHandler clientHandler = new ClientHandler(cardService, accountService);
-//
-//        server.createContext("/client/getAllCardsForUser", clientHandler);
-//
-//        server.start();
-//
-//        final URL urlGet = new URL("http://localhost:8000/client/getAllCardsForUser?id=1");
-//        final HttpURLConnection conGet = (HttpURLConnection) urlGet.openConnection();
-//        conGet.setRequestMethod("GET");
-//        conGet.setRequestProperty("Content-Type", "application/json");
-//        final StringBuilder content = new StringBuilder();
-//
-//        CardDAO cardDAO = new CardDAO();
-//        actual = cardDAO.getAllForUser(1);
-//        ArrayNode array = objectMapper.valueToTree(actual);
-//        JsonNode result = objectMapper.createObjectNode().set("cards", array);
-//
-//        try (final BufferedReader in = new BufferedReader(
-//                new InputStreamReader(conGet.getInputStream()))) {
-//            String inputLine;
-//            while ((inputLine = in.readLine()) != null) {
-//                content.append(inputLine);
-//            }
-//        } catch (Exception exception) {
-//            exception.printStackTrace();
-//        }
-//
-//        String expectedGet = result.toString();
-//        String actualGet = content.toString();
-//
-//        assertEquals(expectedGet, actualGet);
+        List<Card> actual = new ArrayList<>();
+        ObjectMapper objectMapper = new ObjectMapper();
 
-        CardDAO cardDAO = new CardDAO();
+
         HttpServer server = HttpServer.create(
                 new InetSocketAddress(8000), 0);
-        UserService userService = new UserService();
         AccountService accountService = new AccountService();
         CardService cardService = new CardService();
 
         ClientHandler clientHandler = new ClientHandler(cardService, accountService);
 
-        server.createContext("/client/createCardForAccount", clientHandler);
+        server.createContext("/client/getAllCardsForUser", clientHandler);
 
         server.start();
+
+        final URL urlGet = new URL("http://localhost:8000/client/getAllCardsForUser?id=1");
+        final HttpURLConnection conGet = (HttpURLConnection) urlGet.openConnection();
+        conGet.setRequestMethod("GET");
+        conGet.setRequestProperty("Content-Type", "application/json");
+        final StringBuilder content = new StringBuilder();
+//
+        CardDAO cardDAO = new CardDAO();
+        actual = cardDAO.getAllForUser(1);
+        ArrayNode array = objectMapper.valueToTree(actual);
+        JsonNode result = objectMapper.createObjectNode().set("cards", array);
+
+        try (final BufferedReader in = new BufferedReader(
+                new InputStreamReader(conGet.getInputStream()))) {
+            String inputLine;
+            while ((inputLine = in.readLine()) != null) {
+                content.append(inputLine);
+            }
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+
+        String expectedGet = result.toString();
+        String actualGet = content.toString();
+
+        assertEquals(expectedGet, actualGet);
+
+        server.createContext("/client/createCardForAccount", clientHandler);
+
 
         final URL urlPost = new URL("http://localhost:8000/client/createCardForAccount");
         final HttpURLConnection connection = (HttpURLConnection) urlPost.openConnection();
         connection.setRequestMethod("POST");
         connection.setRequestProperty("Content-Type", "application/json");
 //        connection.setRequestProperty("Accept", "application/json");
-        final StringBuilder contentPost = new StringBuilder();
+//        final StringBuilder contentPost = new StringBuilder();
 
         String jsonString = "{\"accountId\": \"1\"}";
         Card expected = new Card(8, null, 1, false);
@@ -118,9 +131,9 @@ public class BaseServerTest extends TestCase {
 //            System.out.println(response.toString());
 //        }
 
-        Card actual = cardDAO.get(8);
-        expected.setNumber(actual.getNumber());
+        Card actual2 = cardDAO.get(8);
+        expected.setNumber(actual2.getNumber());
 
-        assertEquals(expected, actual);
+        assertEquals(expected, actual2);
     }
 }

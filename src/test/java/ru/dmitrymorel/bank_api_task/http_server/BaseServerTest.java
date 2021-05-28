@@ -109,8 +109,8 @@ public class BaseServerTest extends TestCase {
         final HttpURLConnection connection = (HttpURLConnection) urlPost.openConnection();
         connection.setRequestMethod("POST");
         connection.setRequestProperty("Content-Type", "application/json");
-//        connection.setRequestProperty("Accept", "application/json");
-//        final StringBuilder contentPost = new StringBuilder();
+        connection.setRequestProperty("Accept", "application/json");
+        final StringBuilder contentPost = new StringBuilder();
 
         String jsonString = "{\"accountId\": \"1\"}";
         Card expected = new Card(8, null, 1, false);
@@ -121,15 +121,15 @@ public class BaseServerTest extends TestCase {
             byte[] input = jsonString.getBytes(StandardCharsets.UTF_8);
             os.write(input, 0, input.length);
         }
-//        try (BufferedReader br = new BufferedReader(
-//                new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8))) {
-//            StringBuilder response = new StringBuilder();
-//            String responseLine = null;
-//            while ((responseLine = br.readLine()) != null) {
-//                response.append(responseLine.trim());
-//            }
-//            System.out.println(response.toString());
-//        }
+        try (BufferedReader br = new BufferedReader(
+                new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8))) {
+            StringBuilder response = new StringBuilder();
+            String responseLine = null;
+            while ((responseLine = br.readLine()) != null) {
+                response.append(responseLine.trim());
+            }
+            System.out.println(response.toString());
+        }
 
         Card actual2 = cardDAO.get(8);
         expected.setNumber(actual2.getNumber());

@@ -63,6 +63,9 @@ public class ClientHandler implements HttpHandler {
                 handlePostTransaction(httpExchange);
                 break;
             }
+            default: {
+                throw new IOException("Неверный запрос");
+            }
         }
     }
 
@@ -73,6 +76,8 @@ public class ClientHandler implements HttpHandler {
         BigDecimal value = request.getValue();
 
         accountService.withdrawMoney(cardId, value);
+        httpExchange.sendResponseHeaders(200, 1);
+        httpExchange.close();
     }
 
     private void handlePostTransaction(HttpExchange httpExchange) throws IOException {
@@ -83,6 +88,8 @@ public class ClientHandler implements HttpHandler {
         BigDecimal value = transactionRequest.getValue();
 
         accountService.transaction(sendCardId, gettingCardId, value);
+        httpExchange.sendResponseHeaders(200, 1);
+        httpExchange.close();
     }
 
     private void handleGetAllAccountsForUser(HttpExchange httpExchange) throws IOException {
@@ -102,6 +109,7 @@ public class ClientHandler implements HttpHandler {
 
         outputStream.write(stringResult.getBytes());
         outputStream.close();
+        httpExchange.close();
     }
 
     private void handlePostAddMoney(HttpExchange httpExchange) throws IOException {
@@ -111,6 +119,8 @@ public class ClientHandler implements HttpHandler {
         int cardId = request.getCardId();
         BigDecimal value = request.getValue();
         accountService.addMoney(cardId, value);
+        httpExchange.sendResponseHeaders(200, 1);
+        httpExchange.close();
     }
 
     private void handleGetRequestForBalance(HttpExchange httpExchange) throws IOException {
@@ -128,6 +138,7 @@ public class ClientHandler implements HttpHandler {
 
         outputStream.write(result.getBytes());
         outputStream.close();
+        httpExchange.close();
     }
 
     private void handleGetAllCardsForUser(HttpExchange httpExchange) throws IOException {
@@ -147,6 +158,7 @@ public class ClientHandler implements HttpHandler {
 
         outputStream.write(stringResult.getBytes());
         outputStream.close();
+        httpExchange.close();
     }
 
     private void handlePostCreateCardForAccount(HttpExchange httpExchange) throws IOException {
@@ -154,6 +166,8 @@ public class ClientHandler implements HttpHandler {
                 Card.class);
         int accountId = card.getAccountId();
         cardService.saveForAccount(accountId);
+        httpExchange.sendResponseHeaders(200, 1);
+        httpExchange.close();
     }
 
     private void handleGetAllCardsForAccount(HttpExchange httpExchange) throws IOException {
@@ -173,5 +187,6 @@ public class ClientHandler implements HttpHandler {
 
         outputStream.write(stringResult.getBytes());
         outputStream.close();
+        httpExchange.close();
     }
 }

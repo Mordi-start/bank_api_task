@@ -28,7 +28,6 @@ public class BaseServer {
         server.createContext("/client/withdrawMoney", clientHandler);
         server.createContext("/client/doTransaction", clientHandler);
 
-//        AdminUserHandler adminUserHandler = new AdminUserHandler(userService);
 //        AdminAccountHandler adminAccountHandler = new AdminAccountHandler(accountService);
 //        AdminCardHandler adminCardHandler = new AdminCardHandler(accountService);
 //        AdminTransactionHandler adminTransactionHandler = new AdminTransactionHandler(accountService);

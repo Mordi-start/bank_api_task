@@ -13,7 +13,6 @@ public class BaseServer {
     public void startServer() throws IOException {
         HttpServer server = HttpServer.create(
                 new InetSocketAddress(8080), 0);
-//        UserService userService = new UserService();
         AccountService accountService = new AccountService();
         CardService cardService = new CardService();
 

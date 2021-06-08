@@ -1,6 +1,5 @@
 package ru.dmitrymorel.bank_api_task.dao;
 
-import org.junit.Before;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.dmitrymorel.bank_api_task.database.DatabaseConfig;
@@ -11,9 +10,9 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class CardDAOTest {
+class CardDAOImplTest {
 
-    private final CardDAO cardDAO = new CardDAO();
+    private final CardDAOImpl cardDAOImpl = new CardDAOImpl();
     private List<Card> actual = new ArrayList<>();
 
     @BeforeEach
@@ -23,15 +22,15 @@ class CardDAOTest {
 
     @Test
     void testCheckCardNumber() {
-        boolean check = cardDAO.checkCardNumber("1111");
+        boolean check = cardDAOImpl.checkCardNumber("1111");
 
         assertFalse(check);
     }
 
     @Test
     void checkCardEnabled() {
-        boolean enabledFalse = cardDAO.checkCardEnabled(2);
-        boolean enabledTrue = cardDAO.checkCardEnabled(1);
+        boolean enabledFalse = cardDAOImpl.checkCardEnabled(2);
+        boolean enabledTrue = cardDAOImpl.checkCardEnabled(1);
 
         assertFalse(enabledFalse);
         assertTrue(enabledTrue);
@@ -44,7 +43,7 @@ class CardDAOTest {
         expected.add(new Card(2, "1111 5555 3333 4444", 1, false));
         expected.add(new Card(3, "1111 2222 5555 4444", 1, true));
 
-        actual = cardDAO.getAllForAccount(1);
+        actual = cardDAOImpl.getAllForAccount(1);
 
         assertEquals(expected, actual);
     }
@@ -57,7 +56,7 @@ class CardDAOTest {
         expected.add(new Card(3, "1111 2222 5555 4444", 1, true));
         expected.add(new Card(6, "3333 2222 5555 4444", 4, true));
 
-        actual = cardDAO.getAllForUser(1);
+        actual = cardDAOImpl.getAllForUser(1);
 
         assertEquals(expected, actual);
     }
@@ -67,9 +66,9 @@ class CardDAOTest {
         int cardId = 8;
         Card expected = new Card(cardId, null, 1, false);
 
-        cardDAO.saveForAccount(1);
+        cardDAOImpl.saveForAccount(1);
 
-        List<Card> cardList = cardDAO.getAllForAccount(1);
+        List<Card> cardList = cardDAOImpl.getAllForAccount(1);
 
         Card actualCard = null;
 

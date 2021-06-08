@@ -1,7 +1,7 @@
 package ru.dmitrymorel.bank_api_task.service;
 
-import ru.dmitrymorel.bank_api_task.dao.AccountDAO;
-import ru.dmitrymorel.bank_api_task.dao.CardDAO;
+import ru.dmitrymorel.bank_api_task.dao.AccountDAOImpl;
+import ru.dmitrymorel.bank_api_task.dao.CardDAOImpl;
 import ru.dmitrymorel.bank_api_task.model.Card;
 
 import java.sql.SQLException;
@@ -9,8 +9,8 @@ import java.util.List;
 
 public class CardService /*implements CrudService<Card>*/ {
 
-    private static final CardDAO cardDAO = new CardDAO();
-    private static final AccountDAO accountDAO = new AccountDAO();
+    private static final CardDAOImpl CARD_DAO_IMPL = new CardDAOImpl();
+    private static final AccountDAOImpl ACCOUNT_DAO_IMPL = new AccountDAOImpl();
 //    @Override
 //    public Card get(int id) {
 //        return cardDAO.get(id);
@@ -22,11 +22,11 @@ public class CardService /*implements CrudService<Card>*/ {
 //    }
 
     public List<Card> getAllForAccount(int account_id) {
-        return cardDAO.getAllForAccount(account_id);
+        return CARD_DAO_IMPL.getAllForAccount(account_id);
     }
 
     public List<Card> getAllForUser(int user_id) {
-        return cardDAO.getAllForUser(user_id);
+        return CARD_DAO_IMPL.getAllForUser(user_id);
     }
 
 //    @Override
@@ -35,9 +35,9 @@ public class CardService /*implements CrudService<Card>*/ {
 //    }
 
     public void saveForAccount(int account_id) {
-        if(accountDAO.checkAccountExists(account_id)) {
-            if (accountDAO.checkAccountEnabled(account_id)) {
-                cardDAO.saveForAccount(account_id);
+        if(ACCOUNT_DAO_IMPL.checkAccountExists(account_id)) {
+            if (ACCOUNT_DAO_IMPL.checkAccountEnabled(account_id)) {
+                CARD_DAO_IMPL.saveForAccount(account_id);
             }
             else try {
                 throw new SQLException();

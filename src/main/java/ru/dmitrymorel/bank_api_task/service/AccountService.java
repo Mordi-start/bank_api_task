@@ -1,7 +1,7 @@
 package ru.dmitrymorel.bank_api_task.service;
 
-import ru.dmitrymorel.bank_api_task.dao.AccountDAO;
-import ru.dmitrymorel.bank_api_task.dao.CardDAO;
+import ru.dmitrymorel.bank_api_task.dao.AccountDAOImpl;
+import ru.dmitrymorel.bank_api_task.dao.CardDAOImpl;
 import ru.dmitrymorel.bank_api_task.model.Account;
 
 import java.math.BigDecimal;
@@ -10,8 +10,8 @@ import java.util.List;
 
 public class AccountService /*implements CrudService<Account>*/{
 
-    private static final AccountDAO accountDAO = new AccountDAO();
-    private static final CardDAO cardDAO = new CardDAO();
+    private static final AccountDAOImpl ACCOUNT_DAO_IMPL = new AccountDAOImpl();
+    private static final CardDAOImpl CARD_DAO_IMPL = new CardDAOImpl();
 
 //    @Override
 //    public Account get(int id) {
@@ -19,7 +19,7 @@ public class AccountService /*implements CrudService<Account>*/{
 //    }
 
     public BigDecimal getBalance (int id) {
-        return accountDAO.getBalance(id);
+        return ACCOUNT_DAO_IMPL.getBalance(id);
     }
 
 //    @Override
@@ -27,9 +27,9 @@ public class AccountService /*implements CrudService<Account>*/{
 //        return accountDAO.getAll();
 //    }
 
-    public List<Account> getAllForUser(int userId) {
-        return accountDAO.getAllForUser(userId);
-    }
+//    public List<Account> getAllForUser(int userId) {
+//        return ACCOUNT_DAO_IMPL.getAllForUser(userId);
+//    }
 
 //    @Override
 //    public void save(Account account) {
@@ -42,8 +42,8 @@ public class AccountService /*implements CrudService<Account>*/{
 //    }
 
     public void addMoney(int cardId, BigDecimal value) {
-        if (cardDAO.checkCardEnabled(cardId)) {
-            accountDAO.addMoney(cardId, value);
+        if (CARD_DAO_IMPL.checkCardEnabled(cardId)) {
+            ACCOUNT_DAO_IMPL.addMoney(cardId, value);
         }
         else try {
             throw new SQLException();
@@ -53,8 +53,8 @@ public class AccountService /*implements CrudService<Account>*/{
     }
 
     public void transaction(int sendCardId, int gettingCardId, BigDecimal value) {
-        if (cardDAO.checkCardEnabled(sendCardId) && cardDAO.checkCardEnabled(gettingCardId)) {
-            accountDAO.transaction(sendCardId, gettingCardId, value);
+        if (CARD_DAO_IMPL.checkCardEnabled(sendCardId) && CARD_DAO_IMPL.checkCardEnabled(gettingCardId)) {
+            ACCOUNT_DAO_IMPL.transaction(sendCardId, gettingCardId, value);
         }
         else try {
             throw new SQLException();
@@ -64,8 +64,8 @@ public class AccountService /*implements CrudService<Account>*/{
     }
 
     public void withdrawMoney(int cardId, BigDecimal value) {
-        if (cardDAO.checkCardEnabled(cardId)) {
-            accountDAO.withdrawMoney(cardId, value);
+        if (CARD_DAO_IMPL.checkCardEnabled(cardId)) {
+            ACCOUNT_DAO_IMPL.withdrawMoney(cardId, value);
         }
         else try {
             throw new SQLException();

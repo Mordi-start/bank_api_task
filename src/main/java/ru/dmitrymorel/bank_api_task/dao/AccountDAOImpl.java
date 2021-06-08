@@ -1,18 +1,18 @@
 package ru.dmitrymorel.bank_api_task.dao;
 
+import ru.dmitrymorel.bank_api_task.dao.dao_interfaces.AccountDAO;
 import ru.dmitrymorel.bank_api_task.database.DatabaseConfig;
 import ru.dmitrymorel.bank_api_task.model.Account;
-import ru.dmitrymorel.bank_api_task.model.Card;
 
 import java.math.BigDecimal;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AccountDAO /*implements CrudDAO<Account>*/ {
+public class AccountDAOImpl implements AccountDAO {
 
     private static final Connection connection = DatabaseConfig.getConnection();
-    private final CardDAO cardDAO = new CardDAO();
+    private final CardDAOImpl cardDAOImpl = new CardDAOImpl();
 
 //    @Override
 //    public Account get(int id) {
@@ -44,52 +44,53 @@ public class AccountDAO /*implements CrudDAO<Account>*/ {
 //        return account;
 //    }
 
-    public boolean checkAccountExists(int accountId) {
-        try {
-            PreparedStatement preparedStatement = connection
-                    .prepareStatement("SELECT ID FROM ACCOUNTS " +
-                            "WHERE ID=?");
+//    public boolean checkAccountExists(int accountId) {
+//        try {
+//            PreparedStatement preparedStatement = connection
+//                    .prepareStatement("SELECT ID FROM ACCOUNTS " +
+//                            "WHERE ID=?");
+//
+//            preparedStatement.setInt(1, accountId);
+//
+//            ResultSet resultSet = preparedStatement.executeQuery();
+//
+//            int id = 0;
+//            while (resultSet.next()) {
+//                id = resultSet.getInt("id");
+//            }
+//            return id != 0;
+//        } catch (SQLException throwables) {
+//            System.out.println("Счет не существует");
+//        }
+//        return false;
+//    }
+//
+//    public boolean checkAccountEnabled(int accountId) {
+//        Account account = null;
+//        try {
+//            PreparedStatement preparedStatement =
+//                    connection.prepareStatement(
+//                            "SELECT ENABLED FROM ACCOUNTS " +
+//                                    "WHERE ID=?");
+//
+//            preparedStatement.setInt(1, accountId);
+//
+//            ResultSet resultSet = preparedStatement.executeQuery();
+//
+//            account = new Account();
+//
+//            while (resultSet.next()) {
+//                account.setEnabled(resultSet.getBoolean("enabled"));
+//            }
+//
+//            return account.isEnabled();
+//        } catch (SQLException throwables) {
+//            throwables.printStackTrace();
+//        }
+//        return false;
+//    }
 
-            preparedStatement.setInt(1, accountId);
-
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            int id = 0;
-            while (resultSet.next()) {
-                id = resultSet.getInt("id");
-            }
-            return id != 0;
-        } catch (SQLException throwables) {
-            System.out.println("Счет не существует");
-        }
-        return false;
-    }
-
-    public boolean checkAccountEnabled(int accountId) {
-        Account account = null;
-        try {
-            PreparedStatement preparedStatement =
-                    connection.prepareStatement(
-                            "SELECT ENABLED FROM ACCOUNTS " +
-                                    "WHERE ID=?");
-
-            preparedStatement.setInt(1, accountId);
-
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            account = new Account();
-
-            while (resultSet.next()) {
-                account.setEnabled(resultSet.getBoolean("enabled"));
-            }
-
-            return account.isEnabled();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-        return false;
-    }
-
+    @Override
     public BigDecimal getBalance(int cardId) {
         BigDecimal balance = BigDecimal.valueOf(0.0);
 
@@ -112,6 +113,11 @@ public class AccountDAO /*implements CrudDAO<Account>*/ {
             throwables.printStackTrace();
         }
         return balance;
+    }
+
+    @Override
+    public void changeAccountStatus(int accountId) {
+
     }
 
 //    @Override
@@ -141,34 +147,34 @@ public class AccountDAO /*implements CrudDAO<Account>*/ {
 //        return accounts;
 //    }
 
-    public List<Account> getAllForUser(int userId) {
-        List<Account> accounts = new ArrayList<>();
-
-        try {
-            PreparedStatement statement = connection
-                    .prepareStatement("SELECT * FROM ACCOUNTS WHERE USER_ID=?");
-
-            statement.setInt(1, userId);
-
-            ResultSet resultSet = statement.executeQuery();
-
-            while (resultSet.next()) {
-                Account account = new Account();
-
-                account.setId(resultSet.getInt("id"));
-                account.setNumber(resultSet.getString("number"));
-                account.setBalance(resultSet.getBigDecimal("balance"));
-                account.setUserId(resultSet.getInt("user_id"));
-                account.setEnabled(resultSet.getBoolean("enabled"));
-
-                accounts.add(account);
-            }
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-
-        return accounts;
-    }
+//    public List<Account> getAllForUser(int userId) {
+//        List<Account> accounts = new ArrayList<>();
+//
+//        try {
+//            PreparedStatement statement = connection
+//                    .prepareStatement("SELECT * FROM ACCOUNTS WHERE USER_ID=?");
+//
+//            statement.setInt(1, userId);
+//
+//            ResultSet resultSet = statement.executeQuery();
+//
+//            while (resultSet.next()) {
+//                Account account = new Account();
+//
+//                account.setId(resultSet.getInt("id"));
+//                account.setNumber(resultSet.getString("number"));
+//                account.setBalance(resultSet.getBigDecimal("balance"));
+//                account.setUserId(resultSet.getInt("user_id"));
+//                account.setEnabled(resultSet.getBoolean("enabled"));
+//
+//                accounts.add(account);
+//            }
+//        } catch (SQLException throwables) {
+//            throwables.printStackTrace();
+//        }
+//
+//        return accounts;
+//    }
 
 //    @Override
 //    public void save(Account account) {
@@ -204,6 +210,24 @@ public class AccountDAO /*implements CrudDAO<Account>*/ {
 //        }
 //    }
 
+    @Override
+    public void saveAccount(Account account) {
+        try {
+            PreparedStatement preparedStatement =
+                    connection.prepareStatement("INSERT INTO accounts " +
+                            "VALUES(DEFAULT,?,?,?)");
+
+            preparedStatement.setString(1, account.getNumber());
+            preparedStatement.setBigDecimal(2, account.getBalance());
+            preparedStatement.setInt(3, account.getUserId());
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
+
+    @Override
     public void addMoney(int cardId, BigDecimal value) {
         try {
             PreparedStatement preparedStatement =
@@ -222,6 +246,7 @@ public class AccountDAO /*implements CrudDAO<Account>*/ {
         }
     }
 
+    @Override
     public void withdrawMoney (int cardId, BigDecimal value) {
         try {
             PreparedStatement preparedStatement =
@@ -243,6 +268,7 @@ public class AccountDAO /*implements CrudDAO<Account>*/ {
         }
     }
 
+    @Override
     public void transaction(int sendCardId, int gettingCardId, BigDecimal value) {
             withdrawMoney(sendCardId, value);
             addMoney(gettingCardId, value);

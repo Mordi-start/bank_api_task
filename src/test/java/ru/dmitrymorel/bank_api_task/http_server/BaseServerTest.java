@@ -8,19 +8,16 @@ import junit.framework.TestCase;
 import org.h2.tools.RunScript;
 import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
-import ru.dmitrymorel.bank_api_task.dao.CardDAO;
-import ru.dmitrymorel.bank_api_task.database.DatabaseConfig;
+import ru.dmitrymorel.bank_api_task.dao.CardDAOImpl;
 import ru.dmitrymorel.bank_api_task.model.Card;
 import ru.dmitrymorel.bank_api_task.service.AccountService;
 import ru.dmitrymorel.bank_api_task.service.CardService;
-import ru.dmitrymorel.bank_api_task.service.UserService;
 
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.InetSocketAddress;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.security.cert.CertPathValidatorException;
 import java.sql.*;
 import java.util.*;
 
@@ -82,8 +79,8 @@ public class BaseServerTest extends TestCase {
         conGet.setRequestProperty("Content-Type", "application/json");
         final StringBuilder content = new StringBuilder();
 //
-        CardDAO cardDAO = new CardDAO();
-        actual = cardDAO.getAllForUser(1);
+        CardDAOImpl cardDAOImpl = new CardDAOImpl();
+        actual = cardDAOImpl.getAllForUser(1);
         ArrayNode array = objectMapper.valueToTree(actual);
         JsonNode result = objectMapper.createObjectNode().set("cards", array);
 
@@ -131,7 +128,7 @@ public class BaseServerTest extends TestCase {
             System.out.println(response.toString());
         }
 
-        Card actual2 = cardDAO.get(8);
+        Card actual2 = cardDAOImpl.get(8);
         expected.setNumber(actual2.getNumber());
 
         assertEquals(expected, actual2);

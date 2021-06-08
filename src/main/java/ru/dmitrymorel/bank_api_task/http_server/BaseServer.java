@@ -16,7 +16,6 @@ public class BaseServer {
         AccountService accountService = new AccountService();
         CardService cardService = new CardService();
 
-
         ClientHandler clientHandler = new ClientHandler(cardService, accountService);
 
         server.createContext("/client/getAllAccounts", clientHandler);
@@ -30,7 +29,6 @@ public class BaseServer {
 
 //        AdminAccountHandler adminAccountHandler = new AdminAccountHandler(accountService);
 //        AdminCardHandler adminCardHandler = new AdminCardHandler(accountService);
-//        AdminTransactionHandler adminTransactionHandler = new AdminTransactionHandler(accountService);
 //
 //        HttpContext context = server.createContext("/admin/addNewUser", adminUserHandler);
 //        context.setAuthenticator(new BasicAuthenticator("admin") {
